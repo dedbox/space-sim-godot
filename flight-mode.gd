@@ -23,3 +23,7 @@ func _input(event):
 		ship.thrust_on()
 	if event.is_action("ui_down"):
 		ship.brake()
+	if event.is_action_pressed("ui_accept"):
+		ship.start_fire_pri()
+	if event.is_action_released("ui_accept"):
+		ship.end_fire_pri()
