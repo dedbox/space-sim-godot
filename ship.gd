@@ -1,11 +1,5 @@
 extends Sprite
 
-func _ready():
-	set_process(true)
-
-func _process(delta):
-	try_fire_pri(delta)
-
 const MAX_SPEED = 500
 
 var pos = get_pos()
@@ -32,24 +26,37 @@ var blue_laser_scene = preload("res://blue_laser.tscn")
 onready var pri_start = get_node("PrimaryWeapon/Start")
 onready var pri_end = get_node("PrimaryWeapon/End")
 
-var is_firing_pri = false
-var last_fire_pri = 9999.0
+var pri_firing = false
+var pri_ready = false
+var pri_delta = 1.0
 
-func try_fire_pri(delta):
-	last_fire_pri += delta
-	if is_firing_pri:
-		if last_fire_pri > 333.0:
-			fire_pri() 
+func _ready():
+	set_process(true)
 
-func fire_pri():
-	var bullet = blue_laser_scene.instance()
-	bullet.set_global_pos(pri_end.get_global_pos())
-	bullet.set_global_rot(get_global_rot())
-	get_parent().add_child(bullet)
+func _process(delta):
+	pri_delta += delta
+	if pri_firing:
+		if pri_delta >= 0.333:
+			pri_ready = true
+			pri_delta -= 0.333
+		if pri_ready:
+			fire_pri()
+			pri_ready = false
+			pri_delta = 0.0
 
 func start_fire_pri():
-	is_firing_pri = true
-	last_fire_pri = 9999.0
+	pri_firing = true
 
 func end_fire_pri():
-	is_firing_pri = false
+	pri_firing = false
+
+func fire_pri():
+	var start = pri_start.get_global_pos()
+	var end = pri_end.get_global_pos()
+	var bullet = blue_laser_scene.instance()
+	bullet.set_global_pos(end)
+	bullet.set_global_rot(get_global_rot())
+	bullet.dir = (end - start).normalized()
+	get_parent().add_child(bullet)
+	var bar = get_node("../HUD/L1/Bar")
+	bar.set_value(bar.get_value() - 1)  
