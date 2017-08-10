@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=1]
+[gd_scene load_steps=7 format=1]
 
 [ext_resource path="res://flight-mode.gd" type="Script" id=1]
 [ext_resource path="res://star_tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://star-field.gd" type="Script" id=3]
-[ext_resource path="res://ship.png" type="Texture" id=4]
-[ext_resource path="res://ship.gd" type="Script" id=5]
+[ext_resource path="res://void.gd" type="Script" id=4]
+[ext_resource path="res://ship.png" type="Texture" id=5]
+[ext_resource path="res://ship.gd" type="Script" id=6]
 
 [node name="FlightMode" type="Node2D"]
 
@@ -29,13 +30,18 @@ occluder/light_mask = 1
 tile_data = IntArray(  )
 script/script = ExtResource( 3 )
 
+[node name="Void" type="Node2D" parent="Stars"]
+
+visibility/behind_parent = true
+script/script = ExtResource( 4 )
+
 [node name="Ship" type="Sprite" parent="."]
 
 transform/pos = Vector2( 960, 540 )
 transform/rot = -90.0
 transform/scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 4 )
-script/script = ExtResource( 5 )
+texture = ExtResource( 5 )
+script/script = ExtResource( 6 )
 
 [node name="Camera" type="Camera2D" parent="Ship"]
 
