@@ -36,10 +36,10 @@ func _ready():
 func _process(delta):
 	pri_delta += delta
 	if pri_firing:
-		if pri_delta >= 0.333:
+		if pri_delta >= 0.1666:
 			pri_ready = true
-			pri_delta -= 0.333
-		if pri_ready:
+			pri_delta -= 0.1666
+		if pri_ready and get_node("../HUD/L1/Bar").get_value() > 0:
 			fire_pri()
 			pri_ready = false
 			pri_delta = 0.0
